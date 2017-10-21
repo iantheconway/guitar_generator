@@ -16,8 +16,6 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from tensorflow.contrib import rnn
 import scipy.io.wavfile
 
-if PLATFORM.startswith('linux'):
-    matplotlib.use("Agg")
 
 '''
 Code to generate raw audio trained on guitar
