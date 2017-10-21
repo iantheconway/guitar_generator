@@ -66,7 +66,7 @@ class LSTMForecasting(object):
         self.display_step = 2
         self.save_step = 20
         self.n_input = 1  # number of input features
-        self.sample_rate = 44100
+        self.sample_rate = 16000
         self.n_steps = self.sample_rate
         self.n_hidden = 64  # number of hidden layer units
         self.n_classes = 1  # No longer a class, as we are doing regression
@@ -455,7 +455,7 @@ class LSTMForecasting(object):
                 max_error = error
         return max_error
 
-    def generate_guitar(self, n_samples = 44100 * 10):
+    def generate_guitar(self, n_samples = 16000 * 10):
         seed, _ = self.get_batch()
 
         samples = []
@@ -614,7 +614,7 @@ if __name__ == '__main__':
     lstm_forecast.load_features()
     lstm_forecast.tf_graph()
     lstm_forecast.restore("./models/default/default_model220.ckpt")
-    # lstm_forecast.train()
+    lstm_forecast.train()
     lstm_forecast.generate_guitar()
 
 
