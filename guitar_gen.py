@@ -17,6 +17,10 @@ from tensorflow.contrib import rnn
 import scipy.io.wavfile
 
 
+# set tensorflow logging level
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = "3"
+
+
 '''
 Code to generate raw audio trained on guitar
 by Ian Conway
@@ -67,7 +71,7 @@ class LSTMForecasting(object):
         self.save_step = 20
         self.n_input = 1  # number of input features
         self.sample_rate = 16000
-        self.n_steps = self.sample_rate
+        self.n_steps = int(self.sample_rate / 2)
         self.n_hidden = 64  # number of hidden layer units
         self.n_classes = 1  # No longer a class, as we are doing regression
         self.output_steps = 1
