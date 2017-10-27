@@ -1,0 +1,6 @@
+model_checkpoint_path: "model"
+all_model_checkpoint_paths: "../models/default/default_model8260.ckpt"
+all_model_checkpoint_paths: "../models/default/default_model8280.ckpt"
+all_model_checkpoint_paths: "../models/default/default_model8300.ckpt"
+all_model_checkpoint_paths: "../models/default/default_model8320.ckpt"
+all_model_checkpoint_paths: "model"
