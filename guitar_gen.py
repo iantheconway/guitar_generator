@@ -265,7 +265,6 @@ class LSTMForecasting(object):
         self.pred = tf.add(tf.matmul(self.outputs, self.weights['out'], name="multiply_out_weights"),
                            self.biases['out'],
                            name="add_output_bias")
-        print self.pred
 
         self.average_error = tf.reduce_mean(tf.sqrt(tf.clip_by_value(
             tf.squared_difference(self.pred, self.y), 1e-37, 1e+37)))
@@ -459,7 +458,7 @@ class LSTMForecasting(object):
                 max_error = error
         return max_error
 
-    def generate_guitar(self, n_samples = 44100):
+    def generate_guitar(self, n_samples=44100):
         seed, _ = self.get_batch()
 
         samples = []
@@ -476,7 +475,7 @@ class LSTMForecasting(object):
             seed = np.append(seed, [[next_sample]])
             seed = np.delete(seed, 0, 0)
             samples.append(next_sample)
-        samples = np.array(samples, dtype=np.int16)
+        samples = np.array(samples[0], dtype=np.int16)
         scipy.io.wavfile.write("out.wav", self.sample_rate, samples)
 
 
@@ -611,7 +610,7 @@ if __name__ == '__main__':
     lstm_forecast = LSTMForecasting()
     lstm_forecast.load_features()
     lstm_forecast.tf_graph()
-    lstm_forecast.restore("./models/default/default_model8320.ckpt")
+    lstm_forecast.restore("./logs/model")
     # lstm_forecast.train()
     lstm_forecast.generate_guitar()
 
