@@ -265,7 +265,6 @@ class LSTMForecasting(object):
         self.pred = tf.add(tf.matmul(self.outputs, self.weights['out'], name="multiply_out_weights"),
                            self.biases['out'],
                            name="add_output_bias")
-        print self.pred
 
         self.average_error = tf.reduce_mean(tf.sqrt(tf.clip_by_value(
             tf.squared_difference(self.pred, self.y), 1e-37, 1e+37)))
@@ -459,30 +458,24 @@ class LSTMForecasting(object):
                 max_error = error
         return max_error
 
-    def generate_guitar(self, n_samples = 16000 * 10):
+    def generate_guitar(self, n_samples=44100):
         seed, _ = self.get_batch()
 
         samples = []
         for i in seed:
             samples.append(i)
 
-        seed = np.array(seed[-1]).reshape(1, self.sample_rate, 1)
+        seed = np.array(seed[-1]).reshape(1, self.n_steps, 1)
         for i in range(n_samples):
-            seed = np.array(seed).reshape(1, self.sample_rate, 1)
+            seed = np.array(seed).reshape(1, self.n_steps, 1)
             time_before = time.time()
             next_sample = self.sess.run(self.pred, feed_dict={self.x: seed, self.keep_prob: 1.})
             time_after = time.time()
-            print "run time: {}".format(time_after - time_before)
-            # TODO: replace with proper numpy
-            # seed[:, :-1, :] = seed[:, 1:, :]
-            # seed[:, -1, :] = next_sample
-            print seed.shape
+            print "sample: {} out of: {}, run time: {}".format(i, n_samples, (time_after - time_before))
             seed = np.append(seed, [[next_sample]])
-            print seed.shape
             seed = np.delete(seed, 0, 0)
-            print seed.shape
             samples.append(next_sample)
-        samples = np.array(samples,dtype=np.int16)
+        samples = np.array(samples[0], dtype=np.int16)
         scipy.io.wavfile.write("out.wav", self.sample_rate, samples)
 
 
@@ -617,8 +610,8 @@ if __name__ == '__main__':
     lstm_forecast = LSTMForecasting()
     lstm_forecast.load_features()
     lstm_forecast.tf_graph()
-    lstm_forecast.restore("./models/default/default_model220.ckpt")
-    lstm_forecast.train()
+    lstm_forecast.restore("./logs/model")
+    # lstm_forecast.train()
     lstm_forecast.generate_guitar()
 
 
