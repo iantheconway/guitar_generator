@@ -1,6 +1,0 @@
-model_checkpoint_path: "default_model8320.ckpt"
-all_model_checkpoint_paths: "default_model8260.ckpt"
-all_model_checkpoint_paths: "default_model8280.ckpt"
-all_model_checkpoint_paths: "default_model8300.ckpt"
-all_model_checkpoint_paths: "../../logs/model"
-all_model_checkpoint_paths: "default_model8320.ckpt"
