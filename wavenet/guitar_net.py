@@ -1,19 +1,23 @@
 from time import time
 import os
 
-from wavenet.utils import make_batch
-from wavenet.models import Model, Generator
 import scipy
-
 from IPython.display import Audio
 from matplotlib import pyplot as plt
 import numpy as np
 
-print os.path.join(os.path.curdir, "assets", "voice.wav")
-inputs, targets = make_batch('../assets/voice.wav')
+from wavenet.utils import make_batch
+from wavenet.models import Model, Generator
+
+
+inputs, targets, sample_rate = make_batch('../data/guitar.wav')
+
+# TODO: find a way to implement mini batches of 1 second during training. 
+# If this is too large, the program will crash while allocating memory for the graph.
 num_time_samples = inputs.shape[1]
 num_channels = 1
 gpu_fraction = 1.0
+
 
 model = Model(num_time_samples=num_time_samples,
               num_channels=num_channels,
@@ -24,7 +28,7 @@ Audio(inputs.reshape(inputs.shape[1]), rate=44100)
 
 for epoch in range(100):
     tic = time()
-    model.train(inputs, targets)
+    model.train(inputs, targets, iterations=1)
     generator = Generator(model)
     toc = time()
     print('Epoch took {} seconds.'.format(toc - tic))
@@ -35,7 +39,7 @@ for epoch in range(100):
     plt.clf()
 
     tic = time()
-    predictions = generator.run(input_, 10 * 44100)
+    predictions = generator.run(input_, .1 * 44100)
     print predictions
     print predictions[0]
     toc = time()

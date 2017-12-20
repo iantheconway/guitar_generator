@@ -10,7 +10,10 @@ def normalize(data):
 
 
 def make_batch(path):
-    data = wavfile.read(path)[1][:, 0]
+    sample_rate, data = wavfile.read(path)
+    if len(data.shape) > 1:
+        data = data[:, 0]
+
 
     data_ = normalize(data)
     # data_f = np.sign(data_) * (np.log(1 + 255*np.abs(data_)) / np.log(1 + 255))
@@ -22,4 +25,4 @@ def make_batch(path):
 
     # Encode targets as ints.
     targets = (np.digitize(data_[1::], bins, right=False) - 1)[None, :]
-    return inputs, targets
+    return inputs, targets, sample_rate

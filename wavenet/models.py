@@ -71,11 +71,11 @@ class Model(object):
             feed_dict=feed_dict)
         return cost
 
-    def train(self, inputs, targets):
+    def train(self, inputs, targets, iterations=50):
         losses = []
         terminal = False
         i = 0
-        while i < 50:
+        while i < iterations:
             i += 1
             cost = self._train(inputs, targets)
             print "batch {}, cost {}".format(i, cost)
